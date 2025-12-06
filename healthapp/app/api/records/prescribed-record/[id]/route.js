@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import MedicalRecord from '@/models/medicalRecord';
+import PrescribedRecord from '@/models/prescribedRecord';
 import { verifyUser } from '@/lib/verifyUser';
 import { deleteFile } from '@/lib/fileUpload';
 
 export async function DELETE(req, { params }) {
     await dbConnect();
+
     const { userId, errorResponse } = await verifyUser(req);
     if (errorResponse) {
         return errorResponse;
@@ -15,38 +16,38 @@ export async function DELETE(req, { params }) {
         const resolvedParams = await params;
         const recordId = resolvedParams.id;
 
-        const medicalRecord = await MedicalRecord.findById(recordId);
+        const record = await PrescribedRecord.findById(recordId);
 
-        if (!medicalRecord) {
+        if (!record) {
             return NextResponse.json({
                 success: false,
-                message: "Medical record not found",
+                message: "Prescription record not found",
             }, { status: 404 });
         }
 
-        if (medicalRecord.userId.toString() !== userId) {
+        if (record.userId.toString() !== userId) {
             return NextResponse.json({
                 success: false,
                 message: "Unauthorized to delete this record",
             }, { status: 403 });
         }
 
-        if (medicalRecord.fileUrl) {
-            await deleteFile(medicalRecord.fileUrl);
+        if (record.fileUrl) {
+            await deleteFile(record.fileUrl);
         }
 
-        await MedicalRecord.findByIdAndDelete(recordId);
+        await PrescribedRecord.findByIdAndDelete(recordId);
 
         return NextResponse.json({
             success: true,
-            message: "Medical record deleted successfully",
+            message: "Prescription record deleted successfully",
         }, { status: 200 });
 
     } catch (error) {
-        console.error("Error deleting medical record:", error);
+        console.error("Error deleting prescription record:", error);
         return NextResponse.json({
             success: false,
-            message: "Error deleting medical record",
+            message: "Error deleting prescription record",
             error: error.message,
         }, { status: 500 });
     }
