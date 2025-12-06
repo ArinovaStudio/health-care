@@ -163,7 +163,7 @@ export default function Home() {
             <Stethoscope size={60} className="text-teal-500" />
             <div className="flex flex-col ml-4">
               <h2 className="text-teal-400">Trusted by</h2>
-              <h1 className="font-bold text-2xl">10,000+ Patients</h1>
+              <h1 className="font-bold text-2xl">Patients</h1>
             </div>
           </div>
           <div className="mt-10">

@@ -8,10 +8,7 @@ import fs from 'fs';
 export async function GET(req, { params }) {
     await dbConnect();
 
-    const { userId, errorResponse } = await verifyUser(req);
-    if (errorResponse) {
-        return errorResponse;
-    }
+    const { userId } = await verifyUser(req);
 
     try {
         const resolvedParams = await params;
@@ -24,13 +21,6 @@ export async function GET(req, { params }) {
                 success: false, 
                 message: "Record not found" 
             }, { status: 404 });
-        }
-
-        if (record.userId.toString() !== userId) {
-            return NextResponse.json({ 
-                success: false, 
-                message: "Unauthorized access to this record" 
-            }, { status: 403 });
         }
 
         const storageDir = path.join(process.cwd(), "storage");

@@ -9,6 +9,7 @@ import Image from "next/image";
 import {
   addPrescribedMedicationDoctorAction,
   fetchMedicalFile,
+  fetchPrescribedFile,
 } from "@/app/actions/recordsAction";
 import toast from "react-hot-toast";
 
@@ -105,10 +106,20 @@ export default function EmergencyAccessPage() {
   };
 
   // ✅ Fetch file from backend and show preview
-  const openPreview = async (recordId, fileType, fileName) => {
+  const openPreview = async (recordId, fileType, fileName, recordType = "prescribed") => {
     try {
       setLoadingPreview(true);
-      const res = await fetchMedicalFile(recordId);
+      let res;
+      if (recordType === "prescribed"){
+        res = await fetchPrescribedFile(recordId);
+      }
+      else if (recordType === "medical"){
+        res = await fetchMedicalFile(recordId);
+      }
+      else{
+        throw new Error("Invalid record type for preview");
+      }
+      
       if (res.success) {
         const blob = res.data;
         const url = URL.createObjectURL(blob);
@@ -408,7 +419,7 @@ export default function EmergencyAccessPage() {
                   {/* ✅ Preview Button */}
                   <button
                     onClick={() =>
-                      openPreview(record._id, record.fileType, record.fileName)
+                      openPreview(record._id, record.fileType, record.fileName, "prescribed")
                     }
                     className="flex items-center gap-2 bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition-colors"
                   >
@@ -482,7 +493,7 @@ export default function EmergencyAccessPage() {
                         record._id,
                         record.fileType,
                         record.fileName,
-                        false
+                        "medical"
                       )
                     }
                     className="flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-colors mt-2 md:mt-0"
