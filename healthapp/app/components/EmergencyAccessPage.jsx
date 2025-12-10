@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Shield, LogOut, Copy, Check, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { QRCodeCanvas } from "qrcode.react";
 import Navbar from '../patient/_components/Navbar';
@@ -14,12 +14,16 @@ function EmergencyAcessPage() {
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
     const [isVisiblePassword, setIsVisiblePassword] = useState(false);
     const [accessKey, setAccessKey] = useState("");
+    const [accessLink, setAccessLink] = useState("");
     const [qrvalue, setQrValue] = useState("");
 
     const qrRef = useRef();
 
-    const accessLink = `http://localhost:3000/emergencyAccess/${accessKey}`
-    // const accessLink = `https://my-health-app-mu.vercel.app/emergencyAccess/${accessKey}`
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setAccessLink(`${window.location.origin}/emergencyAccess/${accessKey}`);
+        }
+    }, [accessKey]);
 
     const downloadQR = () => {
         const canvas = qrRef.current; 

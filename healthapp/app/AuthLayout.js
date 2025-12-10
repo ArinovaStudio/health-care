@@ -2,11 +2,12 @@
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { verifyFromExternalAPI } from "@/lib/verifyFromExternalAPI";
+import { backendUrl } from "./actions/auth";
 
 const AuthLayout = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
-            const isAuthenticated = await verifyFromExternalAPI(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/auth/status`);
+            const isAuthenticated = await verifyFromExternalAPI(`${backendUrl}/api/auth/status`);
             if (!isAuthenticated) {
                 redirect("/");
             }

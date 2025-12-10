@@ -22,6 +22,16 @@ function Login({ isOpen, onClose, onSwitchToSignUp }) {
                 router.push('/patient')
                 toast.success("Welcome Back ")
             }
+            else {
+                // Redirect directly if already logged in
+                if (res.message === "User already logged in.") {
+                    router.push('/patient');
+                    toast.success("Welcome Back (Already Logged In)");
+                    onClose();
+                } else {
+                    toast.error(res.message || "Login failed");
+                }
+            }
         } catch (error) {
             if (error.response?.status === 400 && error.response?.data?.message === "User already logged in.") {
                 // Redirect directly if already logged in

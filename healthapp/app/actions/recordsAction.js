@@ -1,9 +1,10 @@
 import axios from "axios";
+import { backendUrl } from "./auth";
 
 export async function addPrescribedMedicationAction(data) {
   try {
     const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/upload`,
+      `${backendUrl}/api/records/prescribed-record/upload`,
       data,
       {
         withCredentials: true,
@@ -21,7 +22,7 @@ export async function addPrescribedMedicationAction(data) {
 export async function addPrescribedMedicationDoctorAction(data) {
   try {
     const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/upload/doctor`,
+      `${backendUrl}/api/records/prescribed-record/upload/doctor`,
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -39,7 +40,7 @@ export async function addPrescribedMedicationDoctorAction(data) {
 export async function getPrescribedMedicationAction() {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/all`,
+      `${backendUrl}/api/records/prescribed-record/all`,
       { withCredentials: true }
     );
     return res.data;
@@ -54,7 +55,7 @@ export async function getPrescribedMedicationAction() {
 export async function deletePrescribedMedicationAction(id) {
   try {
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/${id}`,
+      `${backendUrl}/api/records/prescribed-record/${id}`,
       { withCredentials: true }
     );
     return res.data;
@@ -69,7 +70,7 @@ export async function deletePrescribedMedicationAction(id) {
 export async function uploadMedicalAction(formData) {
   try {
     const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/medical-record/upload`,
+      `${backendUrl}/api/records/medical-record/upload`,
       formData,
       {
         withCredentials: true,
@@ -90,7 +91,7 @@ export async function uploadMedicalAction(formData) {
 export async function getMedicalRecordsAction() {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/medical-record/all`,
+      `${backendUrl}/api/records/medical-record/all`,
       { withCredentials: true }
     );
     return res.data;
@@ -105,7 +106,7 @@ export async function getMedicalRecordsAction() {
 export async function deleteMedicalRecords(id) {
   try {
     const res = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/medical-record/${id}`,
+      `${backendUrl}/api/records/medical-record/${id}`,
       { withCredentials: true }
     );
     return res.data;
@@ -120,7 +121,7 @@ export async function deleteMedicalRecords(id) {
 export async function downloadMedicalReports() {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/medical-record/download-all`,
+      `${backendUrl}/api/records/medical-record/download-all`,
       {
         withCredentials: true,
         responseType: "blob", // important!
@@ -148,7 +149,7 @@ export async function downloadMedicalReports() {
 export async function fetchMedicalFile(id) {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/medical-record/file/${id}`,
+      `${backendUrl}/api/records/medical-record/file/${id}`,
       {
         withCredentials: true,
         responseType: "blob",
@@ -172,7 +173,7 @@ export async function fetchMedicalFile(id) {
 export async function fetchPrescribedFile(id) {
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/file/${id}`,
+      `${backendUrl}/api/records/prescribed-record/file/${id}`,
       {
         withCredentials: true,
         responseType: "blob",
