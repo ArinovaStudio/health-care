@@ -1,38 +1,82 @@
-import React from 'react'
+import React from 'react';
 import { Shield } from 'lucide-react';
 
 function Footer() {
 
-    const section = [
-        { name: 'About Us', link: '/' },
-        { name: 'Privacy Policy', link: '/' },
-        { name: 'Terms', link: '/' },
-        { name: 'Team', link: '/' },
-        { name: 'Support', link: '/' },
-        { name: 'Dispose Data', Link: '/' },
-        { name: 'Sitemap', Link:'/'}
-    ]
+    const footerSections = [
+        {
+            title: "Company",
+            links: [
+                { name: 'About Us', link: '/' },
+                { name: 'Team', link: '/' },
+                { name: 'Careers', link: '/' },
+            ],
+        },
+        {
+            title: "Support",
+            links: [
+                { name: 'Contact', link: '/contact' },
+                { name: 'Support', link: '/support' },
+                { name: 'FAQ', link: '/faq' },
+            ],
+        },
+        {
+            title: "Legal",
+            links: [
+                { name: 'Privacy Policy', link: '/privacy' },
+                { name: 'Terms of Service', link: '/terms' },
+                { name: 'Dispose Data', link: '/dispose-data' },
+            ],
+        },
+    ];
 
-  return (
-    <div className='min-h-10 flex items-center justify-center border-t border-gray-200 '>
-            <div className='w-full max-w-7xl flex justify-between items-center p-4'>
-                <div className=' flex items-center space-x-4 font-semibold font-serif'>
-                    <Shield className='text-green-500' /> MediLink
-                </div>
-                <div className='flex space-x-7 text-sm'>
-                    {section.map((sec) => (
-                        <div
-                            key={sec.name}
-                            tabIndex={0}
-                            className='flex justify-center items-center cursor-pointer hover:text-green-600 transition-all duration-300'
-                        >
-                            <p>{sec.name}</p>
+    return (
+        <footer className='bg-white pt-12 pb-8 border-t border-gray-200'> 
+            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='grid grid-cols-1 gap-y-8 md:grid-cols-4 lg:grid-cols-5 md:gap-x-10 lg:gap-x-12'>
+
+                    {/* Column 1: Brand/Tagline (Takes full width on mobile, 2 columns on desktop) */}
+                    <div className='md:col-span-2 lg:col-span-2 space-y-3'> 
+                        <div className='flex items-center space-x-2 text-xl font-bold font-serif text-gray-900'>
+                            <Shield className='text-teal-500 w-6 h-6' /> MediLink
+                        </div>
+                        <p className='text-sm text-gray-500 max-w-sm'>
+                            Your secure and centralized platform for managing all your medical records and credentials.
+                        </p>
+                    </div>
+
+                    {/* Columns 2, 3, 4: Link Sections */}
+                    {footerSections.map((section, index) => (
+                        <div key={index} className='space-y-3'>
+                            <h3 className='text-base font-semibold text-gray-900'>
+                                {section.title}
+                            </h3>
+                            <ul className='space-y-2'>
+                                {section.links.map((link, linkIndex) => (
+                                    <li key={linkIndex}>
+                                        <a
+                                            href={link.link}
+                                            className='text-sm text-gray-600 hover:text-teal-600 transition-colors'
+                                        >
+                                            {link.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     ))}
                 </div>
+
+                {/* Bottom Section: Copyright */}
+                <div className='mt-10 pt-5 border-t border-gray-100 text-center'> {/* Adjusted spacing */}
+                    <p className='text-sm text-gray-500'>
+                        © {new Date().getFullYear()} MediLink. All rights reserved. | Built with 💖 for a healthier future.
+                    </p>
+                </div>
+
             </div>
-        </div>
-  )
+        </footer>
+    );
 }
 
-export default Footer
+export default Footer;
