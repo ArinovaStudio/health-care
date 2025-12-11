@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { backendUrl } from './auth';
 
 export async function userAction() {
   try {
-    const res = await axios.get(`${backendUrl}/api/profile`, { withCredentials: true });
+    const res = await axios.get(`/api/profile`, { withCredentials: true });
     return res.data;
   } catch (error) {
     return {
@@ -15,7 +14,7 @@ export async function userAction() {
 
 export async function editProfileAction(personalInfo, insuranceInfo) {
   try {
-    const res = await axios.patch(`${backendUrl}/api/profile`, {personalInfo, insuranceInfo}, { withCredentials: true });
+    const res = await axios.patch(`/api/profile`, {personalInfo, insuranceInfo}, { withCredentials: true });
     return res.data;
   } catch (error) {
     return {
@@ -27,7 +26,7 @@ export async function editProfileAction(personalInfo, insuranceInfo) {
 
 export async function addAllergy(allergy) {
   try {
-    const res = await axios.post(`${backendUrl}/api/profile/allergy`, {allergy}, { withCredentials: true });
+    const res = await axios.post(`/api/profile/allergy`, {allergy}, { withCredentials: true });
     return res.data;
   } catch (error) {
     return {
@@ -39,7 +38,7 @@ export async function addAllergy(allergy) {
 
 export async function deleteAllergy(id) {
   try {
-    const res = await axios.delete(`${backendUrl}/api/profile/allergy/${id}`, { withCredentials: true });
+    const res = await axios.delete(`/api/profile/allergy/${id}`, { withCredentials: true });
     return res.data;
   } catch (error) {
     return {
@@ -51,7 +50,7 @@ export async function deleteAllergy(id) {
 
 export async function addChronic(chronicCondition) {
   try {
-    const res = await axios.post(`${backendUrl}/api/profile/chronic-condition`,{ chronicCondition }, { withCredentials: true });
+    const res = await axios.post(`/api/profile/chronic-condition`,{ chronicCondition }, { withCredentials: true });
     return res.data;
   } catch (error) {3
     return {
@@ -63,7 +62,7 @@ export async function addChronic(chronicCondition) {
 
 export async function deleteChronic(id) {
   try {
-    const res = await axios.delete(`${backendUrl}/api/profile/chronic-condition/${id}`, { withCredentials: true });
+    const res = await axios.delete(`/api/profile/chronic-condition/${id}`, { withCredentials: true });
     return res.data;
   } catch (error) {
     return {

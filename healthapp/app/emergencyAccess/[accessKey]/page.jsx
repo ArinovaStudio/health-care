@@ -12,7 +12,6 @@ import {
   fetchPrescribedFile,
 } from "@/app/actions/recordsAction";
 import toast from "react-hot-toast";
-import { backendUrl } from "@/app/actions/auth";
 
 export default function EmergencyAccessPage() {
   const { accessKey } = useParams();
@@ -29,7 +28,7 @@ export default function EmergencyAccessPage() {
     const fetchEmergencyData = async () => {
       try {
         const res = await axios.get(
-          `${backendUrl}/api/profile/emergency-access/${accessKey}`
+          `/api/profile/emergency-access/${accessKey}`
         );
         if (res.data.success) {
           setData(res.data.data);

@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { backendUrl } from './auth';
 
 export async function verifyOtpAction(email, otp) {
     try {
         console.log("backend", email)
-        const res = await axios.post(`${backendUrl}/api/auth/verify-otp`, { email, otp }, { withCredentials: true });
+        const res = await axios.post(`/api/auth/verify-otp`, { email, otp }, { withCredentials: true });
         return res.data;
     } catch (error) {
         return {
@@ -16,7 +15,7 @@ export async function verifyOtpAction(email, otp) {
 
 export async function resendOtpAction(email) {
     try {
-        const res = await axios.post(`${backendUrl}/api/auth/resend-otp`,{ email });
+        const res = await axios.post(`/api/auth/resend-otp`,{ email });
         console.log(res)
         return res.data;
     } catch (error) {

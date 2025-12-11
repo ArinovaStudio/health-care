@@ -21,7 +21,6 @@ import toast from 'react-hot-toast';
 import Login from "./components/Login";
 import SignUp from "./components/SignUp.jsx";
 import OTP from "./components/verifyOTP";
-import { backendUrl } from "./actions/auth";
 
 const steps = [
   {
