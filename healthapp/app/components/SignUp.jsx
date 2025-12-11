@@ -27,7 +27,7 @@ function SignUp({ isOpen, onClose, onSwitchToLogin, onOpenOtp }) {
                 setUser({})
             }
 
-            toast.success(res.message);
+            toast.success("Account created successfully! Please verify your email.");
             
         } catch (error) {
             console.error(error);
