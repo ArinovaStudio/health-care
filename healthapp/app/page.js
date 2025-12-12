@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import { Stethoscope, User, FileText, Link2 } from "lucide-react";
 import { Pause } from "lucide-react";
 import Footer from "./components/Footer";
-// import { User, FileText, Link2, Stethoscope } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -105,17 +104,16 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`/api/contact/send`, formData);
-      
-      console.log(res);
-      if (res.status === 200 || res.data.success) { 
-          setFormData({
-            name: "",
-            email: "",
-            subject: "",
-            message: "",
-          });
-          toast.success("Message sent successfully!");
+      const res = await axios.post(`${backendUrl}/api/contact/send`, formData); 
+
+      if (res.status === 200 || res.data.success) {
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+        toast.success("Message sent successfully!");
       }
 
     } catch (err) {
@@ -132,46 +130,46 @@ export default function Home() {
       {/* Hero Section */}
       <main
         id="home"
-        className="bg-teal-100 w-full flex justify-center items-center gap-40 px-10"
+        className="bg-teal-100 w-full flex justify-center items-center px-4 sm:px-6 lg:px-20 py-16 md:py-24"
       >
-        <div className="flex flex-col justify-center min-h-[70vh]">
-          <h1 className="text-5xl font-bold mb-6">Your Health, Your Data,</h1>
-          <h1 className="text-5xl font-bold mb-6 text-teal-500">
-            {" "}
-            Safely in Your Hands
-          </h1>
-          <p>
-            {" "}
-            Manage your medical records, connect with care, and stay safe with{" "}
-            <br /> MyHealthRecord
-          </p>
-          <button onClick={() => setIsLoginOpen(true)} className="mt-6 bg-teal-500 font-semibold tracking-wider text-lg text-white px-8 py-4 rounded-full hover:bg-teal-700 transition-all duration-300 w-56">
-            {" "}
-            Get Started Free{" "}
-          </button>
-          {/* <p className="mt-3">
-            Already a member?
-            <span className="text-teal-500 font-semibold cursor-pointer hover:underline">
-              {" "}
-              Login
-            </span>
-          </p> */}
-        </div>
-
-        <div className="w-2/5 bg-white flex flex-col rounded-xl p-10 shadow-2xl">
-          <div className="flex justify-center items-center">
-            <Stethoscope size={60} className="text-teal-500" />
-            <div className="flex flex-col ml-4">
-              <h2 className="text-teal-400">Trusted by</h2>
-              <h1 className="font-bold text-2xl">Patients</h1>
-            </div>
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left Column: Text Content and Button */}
+          <div className="flex flex-col justify-center min-h-[50vh] lg:min-h-[70vh] order-2 lg:order-1">
+            <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 md:mb-6 leading-tight">
+              Your Health, Your Data,
+            </h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 text-teal-500 leading-tight">
+              Safely in Your Hands
+            </h1>
+            <p className="text-lg text-gray-700 max-w-lg">
+              Manage your medical records, connect with care, and stay safe with MyHealthRecord
+            </p>
+            <button 
+              onClick={() => setIsLoginOpen(true)} 
+              className="mt-8 bg-teal-500 font-semibold tracking-wider text-lg text-white px-8 py-4 rounded-full hover:bg-teal-700 transition-all duration-300 w-full sm:w-64 max-w-xs"
+            >
+              Get Started Free
+            </button>
           </div>
-          <div className="mt-10">
-            <ul className="list-disc marker:text-teal-500 list-color-green list-inside space-y-1 text-lg">
-              <li>Secure Medical Records</li>
-              <li>24/7 Emergency Access</li>
-              <li>Drug Interaction Alerts</li>
-            </ul>
+
+          {/* Right Column: Info Card */}
+          <div className="order-1 hidden md:block lg:order-2">
+            <div className="w-full bg-white flex flex-col rounded-3xl p-6 sm:p-10 shadow-2xl">
+              <div className="flex justify-start items-center">
+                <Stethoscope size={40} className="text-teal-500 flex-shrink-0" />
+                <div className="flex flex-col ml-4">
+                  <h2 className="text-teal-400 text-sm sm:text-base">Trusted by</h2>
+                  <h1 className="font-bold text-xl sm:text-2xl">Patients</h1>
+                </div>
+              </div>
+              <div className="mt-8">
+                <ul className="list-disc marker:text-teal-500 list-color-green list-inside space-y-2 text-base sm:text-lg">
+                  <li>Secure Medical Records</li>
+                  <li>24/7 Emergency Access</li>
+                  <li>Drug Interaction Alerts</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -179,7 +177,7 @@ export default function Home() {
       {/* Features Section */}
       <section
         id="features"
-        className="w-full py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center"
+        className="w-full py-16 md:py-24 px-4 sm:px-6 lg:px-8 flex flex-col items-center"
       >
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto">
@@ -187,20 +185,20 @@ export default function Home() {
             Powerful Features
           </span>
 
-          <h2 className="font-bold text-4xl md:text-5xl text-gray-900 mt-4 leading-tight">
-            Everything You Need to <br />
+          <h2 className="font-bold text-3xl md:text-5xl text-gray-900 mt-4 leading-snug">
+            Everything You Need to <br className="hidden sm:block"/>
             <span className="text-teal-500">Manage Your Health</span>
           </h2>
 
-          <p className="text-lg text-gray-600 mt-4 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 mt-4 leading-relaxed">
             From emergency access to secure storage, we've got you covered with
             comprehensive health management tools.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-16 w-full max-w-7xl">
-          {/* --- Feature Card Component --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 md:mt-16 w-full max-w-7xl">
+          {/* --- Feature Card Component (Mapping logic is unchanged but layout is responsive) --- */}
           {[
             {
               title: "Drug & Allergy Interaction Alerts",
@@ -327,18 +325,18 @@ export default function Home() {
           ].map((f, i) => (
             <div
               key={i}
-              className={`group bg-gradient-to-br ${f.gradient} p-8 rounded-2xl border ${f.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden`}
+              className={`group bg-gradient-to-br ${f.gradient} p-6 sm:p-8 rounded-2xl border ${f.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden`}
             >
               <div className="absolute top-0 right-0 w-28 h-28 bg-white opacity-20 rounded-full -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-500"></div>
 
               <div className="relative">
                 <div
-                  className={`w-16 h-16 rounded-xl flex items-center justify-center mb-5 shadow-lg bg-gradient-to-br ${f.iconBg} group-hover:scale-110 transition-transform duration-300`}
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center mb-4 sm:mb-5 shadow-lg bg-gradient-to-br ${f.iconBg} group-hover:scale-110 transition-transform duration-300`}
                 >
                   {f.icon}
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">
                   {f.title}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -370,42 +368,52 @@ export default function Home() {
       </section>
 
       {/* how it works */}
-      <section id="how" className="px-6 py-32 md:py-20">
+      <section id="how" className="px-4 sm:px-6 py-16 md:py-24">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16 md:mb-20">
+          <div className="text-center mb-12 md:mb-16">
             <span
-              className="inline-block bg-gradient-to-r from-teal-400 to-teal-300 text-teal-900 
-    px-6 py-2 rounded-full tracking-wide font-semibold shadow-sm"
+              className="inline-block bg-teal-100 text-teal-900 
+            px-4 sm:px-6 py-2 rounded-full tracking-wide font-semibold shadow-sm text-sm"
             >
               How It Works
             </span>
 
+            <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mt-4 leading-tight">
+              Your Complete Healthcare Companion
+            </h2>
+
             <p className="text-[#1A1A1A] max-w-xl mx-auto mt-4 text-base md:text-lg leading-relaxed">
-              Your complete healthcare companion in four simple steps
+              In four simple, secure steps
             </p>
           </div>
 
           {/* Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-14">
+          {/* Default to 1 column, switch to 2 columns on md, and 4 columns on lg */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-[24px] p-8 shadow-[0_20px_40px_0_rgba(0,168,154,0.12)] hover:shadow-[0_24px_48px_0_rgba(0,168,154,0.15)] transition-shadow duration-300"
+                  className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_20px_40px_0_rgba(0,168,154,0.12)] hover:shadow-[0_24px_48px_0_rgba(0,168,154,0.15)] transition-shadow duration-300"
                 >
                   {/* Icon Container */}
                   <div className="flex justify-center mb-6">
-                    <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#DFFCF7]">
-                      <Icon className="w-8 h-8 text-[#00A89A] stroke-[2]" />
+                    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-[#DFFCF7]">
+                      <Icon className="w-7 h-7 text-[#00A89A] stroke-2" />
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="text-center">
-                    <h3 className="text-[#000000] mb-3">{step.title}</h3>
-                    <p className="text-[#1A1A1A]">{step.description}</p>
+                  <div className
+                    ="text-center">
+                    <h3 className="text-[#000000] font-semibold text-lg mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-[#1A1A1A] text-sm md:text-base">
+                      {step.description}
+                    </p>
                   </div>
                 </div>
               );
@@ -415,32 +423,32 @@ export default function Home() {
       </section>
 
       {/* faq */}
-      <section id="faq" className="px-6 py-28 md:py-20 bg-[#F9FAFB]">
+      <section id="faq" className="px-4 sm:px-6 py-16 md:py-24 bg-[#F9FAFB]">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
               Find answers to common questions about our healthcare platform
             </p>
           </div>
 
           {/* FAQ Card */}
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-[0px_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
-            <Accordion type="single" collapsible className="w-full space-y-4">
+          <div className="bg-white rounded-3xl p-6 md:p-12 shadow-[0px_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
+            <Accordion type="single" collapsible className="w-full space-y-2 md:space-y-4">
               {faqs.map((faq, index) => (
                 <AccordionItem
                   key={index}
                   value={`item-${index}`}
-                  className="border-b border-gray-200 pb-4"
+                  className="border-b border-gray-200 pb-3 md:pb-4 last:border-b-0"
                 >
-                  <AccordionTrigger className="text-left text-gray-900 font-medium hover:text-[#00A89A] transition-all text-lg cursor-pointer">
+                  <AccordionTrigger className="text-left text-gray-900 font-semibold hover:text-[#00A89A] transition-all text-base md:text-lg cursor-pointer py-3">
                     {faq.question}
                   </AccordionTrigger>
 
-                  <AccordionContent className="text-gray-600 leading-relaxed pt-2">
+                  <AccordionContent className="text-gray-600 leading-relaxed text-sm md:text-base pt-2 pr-6">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -451,30 +459,29 @@ export default function Home() {
       </section>
 
       {/* contact */}
-      <section id="contact" className="px-6 py-28 md:py-20 bg-[#F9FAFB]">
+      <section id="contact" className="px-4 sm:px-6 py-16 md:py-24 bg-[#F9FAFB]">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
               Contact Us
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Have questions? We're here to help and would love to hear from
-              you.
+            <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
+              Have questions? We're here to help and would love to hear from you.
             </p>
           </div>
 
-          {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Two Column Layout (Default to 1 column, switch to 2 columns on lg) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             {/* Contact Form */}
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-8">
+            <div className="bg-white rounded-3xl p-6 md:p-12 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-6 md:mb-8">
                 Send us a message
               </h3>
 
-              <form className="space-y-6" onSubmit={handleSubmit}>
+              <form className="space-y-5 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
-                  <Label htmlFor="name" className="text-gray-700">
+                  <Label htmlFor="name" className="text-gray-700 text-sm">
                     Full Name
                   </Label>
                   <Input
@@ -485,12 +492,12 @@ export default function Home() {
                     onChange={handleChange}
                     type="text"
                     placeholder="John Doe"
-                    className="mt-2 h-12 rounded-xl border-gray-300 bg-gray-50"
+                    className="mt-2 h-10 md:h-12 rounded-xl border-gray-300 bg-gray-50 text-base"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="email" className="text-gray-700">
+                  <Label htmlFor="email" className="text-gray-700 text-sm">
                     Email Address
                   </Label>
                   <Input
@@ -501,12 +508,12 @@ export default function Home() {
                     onChange={handleChange}
                     type="email"
                     placeholder="john@example.com"
-                    className="mt-2 h-12 rounded-xl border-gray-300 bg-gray-50"
+                    className="mt-2 h-10 md:h-12 rounded-xl border-gray-300 bg-gray-50 text-base"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="subject" className="text-gray-700">
+                  <Label htmlFor="subject" className="text-gray-700 text-sm">
                     Subject
                   </Label>
                   <Input
@@ -517,12 +524,12 @@ export default function Home() {
                     onChange={handleChange}
                     type="text"
                     placeholder="How can we help?"
-                    className="mt-2 h-12 rounded-xl border-gray-300 bg-gray-50"
+                    className="mt-2 h-10 md:h-12 rounded-xl border-gray-300 bg-gray-50 text-base"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="message" className="text-gray-700">
+                  <Label htmlFor="message" className="text-gray-700 text-sm">
                     Message
                   </Label>
                   <Textarea
@@ -531,16 +538,16 @@ export default function Home() {
                     required
                     value={formData.message}
                     onChange={handleChange}
-                    rows={5}
+                    rows={4} // Reduced rows for smaller screens
                     placeholder="Tell us more about your inquiry..."
-                    className="mt-2 rounded-xl border-gray-300 bg-gray-50 resize-none"
+                    className="mt-2 rounded-xl border-gray-300 bg-gray-50 resize-none text-base"
                   />
                 </div>
 
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 rounded-xl text-white bg-[#00A89A]"
+                  className="w-full h-10 md:h-12 rounded-xl text-white bg-[#00A89A] hover:bg-teal-700 transition-colors"
                 >
                   {loading ? "Sending..." : "Send Message"}
                 </Button>
@@ -548,49 +555,49 @@ export default function Home() {
             </div>
 
             {/* Contact Information */}
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
               {/* Email Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
+              <div className="bg-white rounded-3xl p-6 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#DFFCF7]">
-                    <Mail className="w-6 h-6 text-[#00A89A]" />
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#DFFCF7] flex-shrink-0">
+                    <Mail className="w-5 h-5 text-[#00A89A]" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
                       Email
                     </h4>
-                    <p className="text-gray-600">sgunjal4777@gmail.com</p>
+                    <p className="text-gray-600 text-base">sgunjal4777@gmail.com</p>
                   </div>
                 </div>
               </div>
 
               {/* Phone Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
+              <div className="bg-white rounded-3xl p-6 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#DFFCF7]">
-                    <Phone className="w-6 h-6 text-[#00A89A]" />
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#DFFCF7] flex-shrink-0">
+                    <Phone className="w-5 h-5 text-[#00A89A]" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
                       Phone
                     </h4>
-                    <p className="text-gray-600">+91 7744881228</p>
+                    <p className="text-gray-600 text-base">+91 7744881228</p>
                   </div>
                 </div>
               </div>
 
               {/* Office Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
+              <div className="bg-white rounded-3xl p-6 shadow-[0_20px_45px_rgba(0,0,0,0.08)] border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#DFFCF7]">
-                    <MapPin className="w-6 h-6 text-[#00A89A]" />
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#DFFCF7] flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-[#00A89A]" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-1">
                       Office
                     </h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      422605 , Maharashtra Sangamner <br />
+                    <p className="text-gray-600 leading-relaxed text-base">
+                      422605 , Maharashtra Sangamner
                     </p>
                   </div>
                 </div>
@@ -600,22 +607,26 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="w-full min-h-[40vh] bg-gradient-to-b from-green-50 to-white flex justify-center items-center">
-        <div className="w-1/2 bg-white rounded-xl flex flex-col justify-center text-center p-10 items-center shadow-2xl">
-          <Pause />
-          <p className="mt-10 text-gray-700 italic">
+      {/* Testimonial/CTA Section */}
+      <div className="w-full min-h-[30vh] md:min-h-[40vh] bg-gradient-to-b from-teal-50 to-white flex justify-center items-center px-4 sm:px-6 py-16">
+        <div className="w-full max-w-2xl bg-white rounded-3xl flex flex-col justify-center text-center p-8 md:p-12 items-center shadow-2xl">
+          <Pause className="w-8 h-8 text-gray-400" />
+          <p className="mt-6 md:mt-8 text-gray-700 italic text-base md:text-lg max-w-xl">
             MyHealthRecord gave me my life back as passbook knowing all
             favourite info is digitalized and foreseeable, especially,{" "}
-            <span className="text-teal-400">Highly Recommended!</span>
+            <span className="text-teal-400 font-semibold">Highly Recommended!</span>
           </p>
-          <button onClick={() => setIsSignUpOpen(true)} className="mt-4 bg-teal-600 text-white px-6 py-2 rounded-full shadow-2xl hover:-translate-y-1 transition-all duration-300">
+          <button 
+            onClick={() => setIsSignUpOpen(true)} 
+            className="mt-6 md:mt-8 bg-teal-600 text-white px-8 py-3 rounded-full shadow-2xl hover:bg-teal-700 hover:-translate-y-1 transition-all duration-300 font-semibold text-base"
+          >
             Signup Now
           </button>
         </div>
       </div>
 
       <Footer />
-      {/* Modals */}
+      {/* Modals are already responsive, no change needed */}
       <Login
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}

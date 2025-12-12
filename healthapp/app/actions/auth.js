@@ -19,6 +19,8 @@ export async function logInAction(user) {
     }
 }
 
+export async function logOutAction(user) {
+    const res = await axios.post(`/api/auth/logout`, user,
 export async function logOutAction() {
     const res = await axios.post(`/api/auth/logout`,
         {},

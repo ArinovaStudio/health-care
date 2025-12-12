@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { X } from 'lucide-react';
 import OTP from './verifyOTP';
 import { signupAction } from '../actions/auth';
+import toast from 'react-hot-toast';
 
 function SignUp({ isOpen, onClose, onSwitchToLogin, onOpenOtp }) {
 
@@ -25,6 +26,9 @@ function SignUp({ isOpen, onClose, onSwitchToLogin, onOpenOtp }) {
                 onOpenOtp();
                 setUser({})
             }
+
+            toast.success("Account created successfully! Please verify your email.");
+            
         } catch (error) {
             console.error(error);
         } finally {
