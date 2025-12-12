@@ -1,8 +1,15 @@
 import axios from "axios";
 
 export async function signupAction(user) {
-    const res = await axios.post(`/api/auth/register`, user);
-    return res.data;
+    try {
+        const res = await axios.post(`/api/auth/register`, user);
+        return res.data;
+    } catch(error) {
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Registration failed'
+        }
+    }    
 }
 
 export async function logInAction(user) {
@@ -18,15 +25,12 @@ export async function logInAction(user) {
         };
     }
 }
-
-export async function logOutAction(user) {
-    const res = await axios.post(`/api/auth/logout`, user,
 export async function logOutAction() {
-    const res = await axios.post(`/api/auth/logout`,
-        {},
-        {
-            withCredentials: true
-        });
-    return res.data
-}
+        const res = await axios.post(`/api/auth/logout`,
+            {},
+            {
+                withCredentials: true
+            });
+        return res.data
+    }
 
