@@ -36,6 +36,7 @@ export async function POST(req) {
             fileName: savedFile.originalName,
             fileType: savedFile.type,
             fileSize: savedFile.size,
+            publicId: savedFile.publicId
         });
 
         await medicalRecord.save();
@@ -49,8 +50,8 @@ export async function POST(req) {
         console.error("Error uploading medical record:", error);
 
         // Delete uploaded file if record creation fails
-        if (savedFile && savedFile.filename) {
-            await deleteFile(savedFile.filename);
+        if (savedFile && savedFile.publicId) {
+            await deleteFile(savedFile.publicId, savedFile.resourceType);
         }
 
         return NextResponse.json({

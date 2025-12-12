@@ -30,6 +30,10 @@ const prescribedRecordSchema = new mongoose.Schema(
       required: true,
       max: 10 * 1024 * 1024, // 10MB max as specified in the form
     },
+    publicId: {
+        type: String,
+        required: true
+    },
     uploadedBy: {
       type: String,
       enum: ["Patient", "Doctor"],

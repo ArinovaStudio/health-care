@@ -32,8 +32,8 @@ export async function DELETE(req, { params }) {
             }, { status: 403 });
         }
 
-        if (record.fileUrl) {
-            await deleteFile(record.fileUrl);
+        if (record.publicId) {
+            await deleteFile(record.publicId);
         }
 
         await PrescribedRecord.findByIdAndDelete(recordId);

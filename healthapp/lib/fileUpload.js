@@ -1,62 +1,46 @@
-import path from 'path';
-import { writeFile, mkdir, unlink } from 'fs/promises';
-import fs from 'fs';
+import cloudinary from './cloudinary';
 
-const CONFIG = {
-    ALLOWED_TYPES: ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx'],
-    MAX_SIZE: 10 * 1024 * 1024, 
-    UPLOAD_DIR: "storage" 
-};
+export async function saveFile(file, folder = 'health-app') {
+    if (!file.type.startsWith('image/')) {
+    throw new Error('Invalid file type. Only image files are allowed.');
+  }
 
-export async function saveFile(file, subfolder = '') {
-    if (!file || typeof file === 'string') {
-        throw new Error("No file uploaded");
-    }
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-    const fileExt = path.extname(file.name).toLowerCase();
-    if (!CONFIG.ALLOWED_TYPES.includes(fileExt)) {
-        throw new Error(`Invalid file type. Allowed: ${CONFIG.ALLOWED_TYPES.join(', ')}`);
-    }
-
-    if (file.size > CONFIG.MAX_SIZE) {
-        throw new Error(`File too large. Max size is ${CONFIG.MAX_SIZE / (1024 * 1024)}MB.`);
-    }
-
-    const storageDir = path.join(process.cwd(), CONFIG.UPLOAD_DIR, subfolder);
-    
-    if (!fs.existsSync(storageDir)) {
-        await mkdir(storageDir, { recursive: true });
-    }
-
-    const uniqueSuffix = Date.now() + "-" + file.name.replace(/\s+/g, '-');
-    const filePath = path.join(storageDir, uniqueSuffix);
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filePath, buffer);
-
-    return {
-        filename: uniqueSuffix,
-        originalName: file.name,
-        size: file.size,
-        type: fileExt.substring(1),
-        fullPath: filePath
-    };
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: folder,
+        resource_type: 'image',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve({
+            filename: result.secure_url, 
+            originalName: file.name,
+            size: result.bytes,
+            type: result.format,
+            publicId: result.public_id,
+            resourceType: result.resource_type 
+          });
+        }
+      }
+    );
+    uploadStream.end(buffer);
+  });
 }
 
-export async function deleteFile(filename) {
-    if (!filename) return;
-
-    const storageDir = path.join(process.cwd(), 'storage');
-    const filePath = path.join(storageDir, filename);
-
-    try {
-        if (fs.existsSync(filePath)) {
-            await unlink(filePath);
-            return true;
-        }
-    } catch (error) {
-        console.error(`Error deleting file ${filename}:`, error);
-    }
+export async function deleteFile(publicId, resourceType = 'image') {
+  if (!publicId) return false;
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    return true;
+  } catch (error) {
+    console.error("Cloudinary Delete Error:", error);
     return false;
+  }
 }

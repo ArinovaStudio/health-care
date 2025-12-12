@@ -31,8 +31,8 @@ export async function DELETE(req, { params }) {
             }, { status: 403 });
         }
 
-        if (medicalRecord.fileUrl) {
-            await deleteFile(medicalRecord.fileUrl);
+        if (medicalRecord.publicId) {
+            await deleteFile(medicalRecord.publicId);
         }
 
         await MedicalRecord.findByIdAndDelete(recordId);

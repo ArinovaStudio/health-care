@@ -43,6 +43,10 @@ const medicalRecordSchema = new mongoose.Schema({
         // required: true,
         max: 10 * 1024 * 1024  // 10MB max as specified in the form
     },
+    publicId: { 
+        type: String,
+        required: true
+    },
     uploadedAt: {
         type: Date,
         default: Date.now

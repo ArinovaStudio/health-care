@@ -50,7 +50,7 @@ function MedicationPage() {
     const getMed = useCallback(async () => {
         setIsFetching(true);
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/records/prescribed-record/all`, { withCredentials: true });
+            const res = await axios.get(`/api/records/prescribed-record/all`, { withCredentials: true });
             if (res.data.success) {
                 setMedList(res.data.data || []);
             }

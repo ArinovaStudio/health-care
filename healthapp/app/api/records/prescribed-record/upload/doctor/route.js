@@ -44,6 +44,7 @@ export async function POST(req) {
             fileName: savedFile.originalName,
             fileType: savedFile.type,
             fileSize: savedFile.size,
+            publicId: savedFile.publicId,
             uploadedBy: "Doctor",
         });
 
@@ -58,8 +59,8 @@ export async function POST(req) {
     } catch (error) {
         console.error("Error uploading prescription (Doctor):", error);
 
-        if (savedFile && savedFile.filename) {
-            await deleteFile(savedFile.filename);
+        if (savedFile && savedFile.publicId) {
+            await deleteFile(savedFile.publicId, savedFile.resource_type);
         }
 
         return NextResponse.json({

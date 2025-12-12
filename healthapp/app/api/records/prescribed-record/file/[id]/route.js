@@ -2,13 +2,15 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import PrescribedRecord from '@/models/prescribedRecord';
 import { verifyUser } from '@/lib/verifyUser';
-import path from 'path';
-import fs from 'fs';
 
 export async function GET(req, { params }) {
     await dbConnect();
 
-    const { userId } = await verifyUser(req);
+    const { userId, errorResponse } = await verifyUser(req);
+
+    if (errorResponse) {
+        return errorResponse;
+    }
 
     try {
         const resolvedParams = await params;
@@ -23,38 +25,46 @@ export async function GET(req, { params }) {
             }, { status: 404 });
         }
 
-        const storageDir = path.join(process.cwd(), "storage");
-        const filePath = path.join(storageDir, record.fileUrl);
-
-        if (!fs.existsSync(filePath)) {
+        if (record.userId.toString() !== userId) {
             return NextResponse.json({ 
                 success: false, 
-                message: "File missing on server" 
-            }, { status: 404 });
+                message: "Unauthorized access to this record" 
+            }, { status: 403 });
         }
 
-        const ext = path.extname(record.fileName).toLowerCase();
-        let contentType = "application/octet-stream";
-        if (ext === ".pdf") contentType = "application/pdf";
-        else if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";
-        else if (ext === ".png") contentType = "image/png";
-        else if (ext === ".doc") contentType = "application/msword";
-        else if (ext === ".docx") contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-        const inline = contentType.startsWith("image/") || contentType === "application/pdf";
-        const dispositionType = inline ? "inline" : "attachment";
-        const contentDisposition = `${dispositionType}; filename="${encodeURIComponent(record.fileName)}"`;
-
-        const fileBuffer = fs.readFileSync(filePath);
-
-        return new NextResponse(fileBuffer, {
-            status: 200,
-            headers: {
-                'Content-Type': contentType,
-                'Content-Disposition': contentDisposition,
-                'Content-Length': fileBuffer.length.toString(),
+        if (record.fileUrl) {
+            const cloudResponse = await fetch(record.fileUrl);
+            
+            if (!cloudResponse.ok) {
+                return NextResponse.json({ 
+                    success: false, 
+                    message: "Failed to retrieve file from cloud storage" 
+                }, { status: 502 });
             }
-        });
+
+            const fileBuffer = await cloudResponse.arrayBuffer();
+            
+            const contentType = cloudResponse.headers.get('content-type') || 'application/octet-stream';
+            
+            const inline = contentType.startsWith("image/") || contentType === "application/pdf";
+            const dispositionType = inline ? "inline" : "attachment";
+            const contentDisposition = `${dispositionType}; filename="${encodeURIComponent(record.fileName)}"`;
+
+            return new NextResponse(fileBuffer, {
+                status: 200,
+                headers: {
+                    'Content-Type': contentType,
+                    'Content-Disposition': contentDisposition,
+                    'Content-Length': fileBuffer.byteLength.toString(),
+                }
+            });
+        }
+
+        return NextResponse.json({ 
+            success: false, 
+            message: "File URL missing in record" 
+        }, { status: 404 });
+
 
     } catch (error) {
         console.error("Error serving file:", error);

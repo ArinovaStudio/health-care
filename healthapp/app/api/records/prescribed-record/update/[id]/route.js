@@ -43,14 +43,15 @@ export async function PUT(req, { params }) {
 
         if (savedFile) {
             // If a new file uploaded, delete old file and update fields
-            if (record.fileUrl) {
-                await deleteFile(record.fileUrl);
+            if (record.publicId) {
+                await deleteFile(record.publicId);
             }
 
             record.fileUrl = savedFile.filename;
             record.fileName = savedFile.originalName;
             record.fileType = savedFile.type;
             record.fileSize = savedFile.size;
+            record.publicId = savedFile.publicId;
         }
 
         await record.save();
@@ -64,8 +65,8 @@ export async function PUT(req, { params }) {
     } catch (error) {
         console.error("Error updating prescription record:", error);
 
-        if (savedFile) {
-            await deleteFile(savedFile.filename);
+        if (savedFile && savedFile.publicId) {
+            await deleteFile(savedFile.publicId, savedFile.resource_type);
         }
 
         return NextResponse.json({
