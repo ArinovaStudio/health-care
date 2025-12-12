@@ -19,8 +19,9 @@ function SignUp({ isOpen, onClose, onSwitchToLogin, onOpenOtp }) {
         try {
             setLoading(true);
             
-            const res = await signupAction(user)
-            if (res.status === 200 ||   res.success) { 
+            const res = await signupAction(user);
+            
+            if (res.success) { 
                 localStorage.setItem("userEmail", user.email);  
                 onClose();         
                 onOpenOtp();
@@ -28,7 +29,7 @@ function SignUp({ isOpen, onClose, onSwitchToLogin, onOpenOtp }) {
                 toast.success("Account created successfully! Please verify your email.");
             }
 
-            if(res.status === 400 ) {
+            else {
                 toast.error(res.message || "Email is already registered.");
             }
             

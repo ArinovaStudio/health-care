@@ -23,7 +23,7 @@ export async function POST(req) {
         const { name, email, password } = body;
 
          // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email }).select("+isEmailVerified");
         
         if (existingUser && existingUser.isEmailVerified) {
             return NextResponse.json({

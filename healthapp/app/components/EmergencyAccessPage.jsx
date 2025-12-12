@@ -15,7 +15,8 @@ function EmergencyAcessPage() {
     // Removed unused qrvalue state
 
     const qrRef = useRef();
-    const accessLink = `http://localhost:3001/emergencyAccess/${accessKey}`
+    const baseUrl = (typeof window !== 'undefined' ? window.location.origin : 'https://health-care-sayam.vercel.app');
+    const accessLink = `${baseUrl}/emergencyAccess/${accessKey}`;
 
     const downloadQR = () => {
         const canvas = qrRef.current;

@@ -104,7 +104,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${backendUrl}/api/contact/send`, formData); 
+      const res = await axios.post(`/api/contact/send`, formData); 
 
       if (res.status === 200 || res.data.success) {
         setFormData({
