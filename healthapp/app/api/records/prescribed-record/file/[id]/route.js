@@ -6,12 +6,6 @@ import { verifyUser } from '@/lib/verifyUser';
 export async function GET(req, { params }) {
     await dbConnect();
 
-    const { userId, errorResponse } = await verifyUser(req);
-
-    if (errorResponse) {
-        return errorResponse;
-    }
-
     try {
         const resolvedParams = await params;
         const recordId = resolvedParams.id;
@@ -19,17 +13,7 @@ export async function GET(req, { params }) {
         const record = await PrescribedRecord.findById(recordId);
 
         if (!record) {
-            return NextResponse.json({ 
-                success: false, 
-                message: "Record not found" 
-            }, { status: 404 });
-        }
-
-        if (record.userId.toString() !== userId) {
-            return NextResponse.json({ 
-                success: false, 
-                message: "Unauthorized access to this record" 
-            }, { status: 403 });
+            return NextResponse.json({ success: false, message: "Record not found" }, { status: 404 });
         }
 
         if (record.fileUrl) {
