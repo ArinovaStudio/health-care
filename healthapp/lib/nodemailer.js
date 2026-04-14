@@ -4,10 +4,11 @@ const email = process.env.EMAIL_USER;
 const pass = process.env.EMAIL_PASS;
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: { user: email, pass: pass }
+  service: 'gmail', 
+  auth: {
+    user: email,
+    pass: pass
+  }
 });
 
 export async function sendOTPEmail(toEmail, otp) {

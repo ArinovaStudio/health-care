@@ -18,10 +18,12 @@ async function dbConnect() {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGO_URI).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGO_URI, {
+      bufferCommands: false
+    }).then((mongoose) => {
       console.log("MongoDB connected");
       return mongoose;
-    }).catch(err => console.log(err));;
+    })
   }
 
   try {
