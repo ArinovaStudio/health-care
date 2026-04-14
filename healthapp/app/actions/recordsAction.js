@@ -145,15 +145,14 @@ export async function downloadMedicalReports() {
   }
 }
 
-export async function fetchMedicalFile(id) {
+export async function fetchMedicalFile(id, accessKey = null) {
   try {
-    const res = await axios.get(
-      `/api/records/medical-record/file/${id}`,
-      {
-        withCredentials: true,
-        responseType: "blob",
-      }
-    );
+    const url = `/api/records/medical-record/file/${id}${accessKey ? `?accessKey=${accessKey}` : ''}`;
+    
+    const res = await axios.get(url, {
+      withCredentials: true,
+      responseType: "blob",
+    });
 
     return {
       success: true,
@@ -161,7 +160,6 @@ export async function fetchMedicalFile(id) {
       headers: res.headers,
     };
   } catch (error) {
-    console.log("Error fetching medical file:", error);
     return {
       success: false,
       message: error.response?.data?.message || "Fetch file failed",

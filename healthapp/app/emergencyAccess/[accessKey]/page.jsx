@@ -105,41 +105,31 @@ export default function EmergencyAccessPage() {
       .join(" ");
   };
 
-  // ✅ Fetch file from backend and show preview
+  // Fetch file from backend and show preview
   const openPreview = async (recordId, fileType, fileName, recordType = "prescribed") => {
-    try {
-      setLoadingPreview(true);
-      let res;
-      if (recordType === "prescribed"){
-        res = await fetchPrescribedFile(recordId);
+      try {
+        setLoadingPreview(true);
+        let res;
+        
+        if (recordType === "prescribed"){
+          res = await fetchPrescribedFile(recordId, accessKey); 
+        }
+        else if (recordType === "medical"){
+          res = await fetchMedicalFile(recordId, accessKey); 
+        }
+        
+        if (res.success) {
+          const blob = res.data;
+          const url = URL.createObjectURL(blob);
+          setPreviewFile({ url, type: res.headers["content-type"], name: fileName });
+        } else {
+          toast.error(res.message); 
+        }
+      } catch (err) {
+        toast.error("Unable to preview this file");
+      } finally {
+        setLoadingPreview(false);
       }
-      else if (recordType === "medical"){
-        res = await fetchMedicalFile(recordId);
-      }
-      else{
-        throw new Error("Invalid record type for preview");
-      }
-      
-      if (res.success) {
-        const blob = res.data;
-        const url = URL.createObjectURL(blob);
-        const contentType =
-          res.headers["content-type"] ||
-          (fileType === "pdf"
-            ? "application/pdf"
-            : ["png", "jpg", "jpeg"].includes(fileType)
-            ? `image/${fileType}`
-            : "application/octet-stream");
-        setPreviewFile({ url, type: contentType, name: fileName });
-      } else {
-        alert(res.message || "Failed to fetch file");
-      }
-    } catch (err) {
-      console.error("Preview failed:", err);
-      alert("Unable to preview this file");
-    } finally {
-      setLoadingPreview(false);
-    }
   };
 
   const closePreview = () => {

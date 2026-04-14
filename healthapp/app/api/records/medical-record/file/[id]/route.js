@@ -1,31 +1,43 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import MedicalRecord from '@/models/medicalRecord';
+import User from '@/models/user';
 import { verifyUser } from '@/lib/verifyUser';
 
 export async function GET(req, { params }) {
     await dbConnect();
 
-    const { userId, errorResponse } = await verifyUser(req);
+    const { searchParams } = new URL(req.url);
+    const accessKey = searchParams.get('accessKey');
 
-    if (errorResponse) {
-        return errorResponse;
+    let userId = null;
+    
+    const auth = await verifyUser(req);
+    if (auth && auth.userId) {
+        userId = auth.userId;
     }
 
     try {
         const resolvedParams = await params;
         const recordId = resolvedParams.id;
-
         const record = await MedicalRecord.findById(recordId);
 
         if (!record) {
-            return NextResponse.json({ 
-                success: false, 
-                message: "Record not found" 
-            }, { status: 404 });
+            return NextResponse.json({ success: false, message: "Record not found" }, { status: 404 });
         }
 
-        if (record.userId.toString() !== userId) {
+        let isAuthorized = false;
+
+        if (userId && record.userId.toString() === userId) {
+            isAuthorized = true;
+        } else if (accessKey) {
+            const owner = await User.findById(record.userId);
+            if (owner && owner.emergencyAccessKey === accessKey) {
+                isAuthorized = true;
+            }
+        }
+
+        if (!isAuthorized) {
             return NextResponse.json({ 
                 success: false, 
                 message: "Unauthorized access to this record" 
@@ -34,43 +46,24 @@ export async function GET(req, { params }) {
 
         if (record.fileUrl) {
             const cloudResponse = await fetch(record.fileUrl);
-            
-            if (!cloudResponse.ok) {
-                return NextResponse.json({ 
-                    success: false, 
-                    message: "Failed to retrieve file from cloudinary" 
-                }, { status: 502 });
-            }
+            if (!cloudResponse.ok) return NextResponse.json({ success: false, message: "Cloud error" }, { status: 502 });
 
             const fileBuffer = await cloudResponse.arrayBuffer();
-            
             const contentType = cloudResponse.headers.get('content-type') || 'application/octet-stream';
-            
             const inline = contentType.startsWith("image/") || contentType === "application/pdf";
-            const dispositionType = inline ? "inline" : "attachment";
-            const contentDisposition = `${dispositionType}; filename="${encodeURIComponent(record.fileName)}"`;
-
+            
             return new NextResponse(fileBuffer, {
                 status: 200,
                 headers: {
                     'Content-Type': contentType,
-                    'Content-Disposition': contentDisposition,
+                    'Content-Disposition': `${inline ? "inline" : "attachment"}; filename="${encodeURIComponent(record.fileName)}"`,
                     'Content-Length': fileBuffer.byteLength.toString(),
                 }
             });
         }
 
-        return NextResponse.json({ 
-            success: false, 
-            message: "File URL missing in record" 
-        }, { status: 404 });
-
+        return NextResponse.json({ success: false, message: "URL missing" }, { status: 404 });
     } catch (error) {
-        console.error("Error serving file:", error);
-        return NextResponse.json({
-            success: false,
-            message: "Error serving file",
-            error: error.message,
-        }, { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 }
